@@ -62,8 +62,6 @@ namespace eFashionShop.Application.Products
                 Description = request.Description,
                 Details = request.Details,
                 Customer = request.Customer,
-                Localtion = request.Localtion,
-                Area = request.Area,
                 IsFeatured = request.IsFeatured,
             };
 
@@ -139,8 +137,6 @@ namespace eFashionShop.Application.Products
                         Description = x.p.Description,
                         Details = x.p.Details,
                         Customer = x.p.Customer,
-                        Localtion = x.p.Localtion,
-                        Area = x.p.Area
                     }).ToListAsync();
             }
             else
@@ -165,8 +161,6 @@ namespace eFashionShop.Application.Products
                         Description = x.p.Description,
                         Details = x.p.Details,
                         Customer = x.p.Customer,
-                        Localtion = x.p.Localtion,
-                        Area = x.p.Area,
                     }).ToListAsync();
             }
 
@@ -198,9 +192,7 @@ namespace eFashionShop.Application.Products
                     Description = x.p.Description,
                     Details = x.p.Details,
                     Customer = x.p.Customer,
-                    Localtion = x.p.Localtion,
                     ThumbnailImage = x.i.ImagePath,
-                    Area = x.p.Area,
                 }).ToListAsync();
             return data;
         }
@@ -220,8 +212,6 @@ namespace eFashionShop.Application.Products
                 Details = product != null ? product.Details : null,
                 Name = product != null ? product.Name : null,
                 Customer = product != null ? product.Customer : null,
-                Localtion = product != null ? product.Localtion : null,
-                Area = product != null ? product.Area : 0,
                 ThumbnailImage = image != null ? image.ImagePath : "no-image.jpg",
                 IsFeatured = product.IsFeatured,
                 Categories = categories
@@ -247,9 +237,7 @@ namespace eFashionShop.Application.Products
                         Description = product.Description,
                         Details = product.Details,
                         Customer = product.Customer,
-                        Localtion = product.Localtion,
                         ThumbnailImage = image != null ? image.ImagePath : "",
-                        Area = product.Area,
                     });
                 }
             }
@@ -317,8 +305,6 @@ namespace eFashionShop.Application.Products
             product.Description = request.Description;
             product.Details = request.Details;
             product.Customer = request.Customer;
-            product.Localtion = request.Localtion;
-            product.Area = request.Area;
             product.IsFeatured = request.IsFeatured;
             _context.Update(product);
             return await _context.SaveChangesAsync();
@@ -388,8 +374,6 @@ namespace eFashionShop.Application.Products
                     Description = x.p.Description,
                     ImagePath = x.i.ImagePath,
                     Customer = x.p.Customer,
-                    Localtion = x.p.Localtion,
-                    Area = x.p.Area,
                     IsFeatured = x.p.IsFeatured
                 }).ToListAsync();
 
