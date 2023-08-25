@@ -8,6 +8,7 @@ using eFashionShop.Exceptions;
 using eFashionShop.Data.Entities;
 using eFashionShop.Data.Enums;
 using eFashionShop.Application.CloudinaryService;
+using CloudinaryDotNet.Actions;
 
 namespace eFashionShop.Application.Categories
 {
@@ -25,16 +26,19 @@ namespace eFashionShop.Application.Categories
         public async Task<bool> Create(CategoryCreateVm categoryVm)
         {
             if (categoryVm == null) throw new EShopException("Create fail!");
-            if(categoryVm.File == null) throw new EShopException("Create fail!");
-            var image = await _photoService.AddPhotoAsync(categoryVm.File);
+            ImageUploadResult image = null;
+            if (categoryVm.File != null)
+            {
+                image = await _photoService.AddPhotoAsync(categoryVm.File);
+            }
             var category = new Category
             {
                 Name = categoryVm.Name,
                 IsShowOnHome = categoryVm.IsShowOnHome,
                 ParentId = categoryVm.ParentId,
                 Status = Status.Active,
-                ImagePublishId = image.PublicId,
-                ImageUrl = image.SecureUrl.AbsoluteUri
+                ImagePublishId = image == null ? "" : image.PublicId,
+                ImageUrl = image == null ? "" : image.SecureUrl.AbsoluteUri
             };
             _context.Categories.Add(category);
             return await _context.SaveChangesAsync() > 0;

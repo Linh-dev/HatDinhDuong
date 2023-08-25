@@ -1,6 +1,7 @@
 ﻿using eFashionShop.Application.Categories;
 using eFashionShop.ViewModels.Catalog.Categories;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace eFashionShop.Controllers.AdminController
@@ -45,21 +46,30 @@ namespace eFashionShop.Controllers.AdminController
         public async Task<IActionResult> Create([FromForm] CategoryCreateVm res)
         {
             var ListCategoryParent = await _categoryService.GetListParent();
-            if (!ModelState.IsValid)
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.ListCategoryParent = ListCategoryParent;
+                    return View(res);
+                }
+                var result = _categoryService.Create(res);
+                if (result.Result)
+                {
+                    TempData["result"] = "Thêm mới thành công";
+                    return RedirectToAction("Index");
+                }
+                ModelState.AddModelError("error", "Thêm mới thất bại");
+                ViewBag.ListCategoryParent = ListCategoryParent;
+                return View(res);
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("error", ex.Message);
                 ViewBag.ListCategoryParent = ListCategoryParent;
                 return View(res);
             }
 
-            var result = _categoryService.Create(res);
-            if (result.Result)
-            {
-                TempData["result"] = "Thêm mới thành công";
-                return RedirectToAction("Index");
-            }
-            ModelState.AddModelError("", "Thêm mới thất bại");
-            ViewBag.ListCategoryParent = ListCategoryParent;
-            return View(res);
         }
 
         [HttpGet]
