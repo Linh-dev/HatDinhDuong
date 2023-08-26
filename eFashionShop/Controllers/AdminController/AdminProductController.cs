@@ -137,7 +137,7 @@ namespace eFashionShop.Controllers.AdminController
                 Description = product.Description,
                 Details = product.Details,
                 Name = product.Name,
-                Customer = product.Customer,
+                Trademark = product.Customer,
                 IsFeatured = product.IsFeatured
             };
             ViewBag.images = images;

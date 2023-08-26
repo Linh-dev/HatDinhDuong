@@ -61,7 +61,7 @@ namespace eFashionShop.Application.Products
                 Name = request.Name,
                 Description = request.Description,
                 Details = request.Details,
-                Customer = request.Customer,
+                Trademark = request.Trademark,
                 IsFeatured = request.IsFeatured,
             };
 
@@ -136,7 +136,7 @@ namespace eFashionShop.Application.Products
                         DateCreated = x.p.DateCreated,
                         Description = x.p.Description,
                         Details = x.p.Details,
-                        Customer = x.p.Customer,
+                        Customer = x.p.Trademark,
                     }).ToListAsync();
             }
             else
@@ -160,7 +160,7 @@ namespace eFashionShop.Application.Products
                         DateCreated = x.p.DateCreated,
                         Description = x.p.Description,
                         Details = x.p.Details,
-                        Customer = x.p.Customer,
+                        Customer = x.p.Trademark,
                     }).ToListAsync();
             }
 
@@ -191,7 +191,7 @@ namespace eFashionShop.Application.Products
                     DateCreated = x.p.DateCreated,
                     Description = x.p.Description,
                     Details = x.p.Details,
-                    Customer = x.p.Customer,
+                    Customer = x.p.Trademark,
                     ThumbnailImage = x.i.ImagePath,
                 }).ToListAsync();
             return data;
@@ -211,7 +211,7 @@ namespace eFashionShop.Application.Products
                 Description = product != null ? product.Description : null,
                 Details = product != null ? product.Details : null,
                 Name = product != null ? product.Name : null,
-                Customer = product != null ? product.Customer : null,
+                Customer = product != null ? product.Trademark : null,
                 ThumbnailImage = image != null ? image.ImagePath : "no-image.jpg",
                 IsFeatured = product.IsFeatured,
                 Categories = categories
@@ -236,7 +236,7 @@ namespace eFashionShop.Application.Products
                         DateCreated = product.DateCreated,
                         Description = product.Description,
                         Details = product.Details,
-                        Customer = product.Customer,
+                        Customer = product.Trademark,
                         ThumbnailImage = image != null ? image.ImagePath : "",
                     });
                 }
@@ -304,7 +304,7 @@ namespace eFashionShop.Application.Products
             product.Name = request.Name;
             product.Description = request.Description;
             product.Details = request.Details;
-            product.Customer = request.Customer;
+            product.Trademark = request.Trademark;
             product.IsFeatured = request.IsFeatured;
             _context.Update(product);
             return await _context.SaveChangesAsync();
@@ -373,7 +373,7 @@ namespace eFashionShop.Application.Products
                     Details = x.p.Details,
                     Description = x.p.Description,
                     ImagePath = x.i.ImagePath,
-                    Customer = x.p.Customer,
+                    Customer = x.p.Trademark,
                     IsFeatured = x.p.IsFeatured
                 }).ToListAsync();
 
