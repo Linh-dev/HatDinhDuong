@@ -9,6 +9,7 @@ namespace eFashionShop.ViewModels.Catalog.Categories
         public int Id { get; set; }
         public string Name { set; get; }
         public bool IsShowOnHome { set; get; }
+        public bool IsMainCategory { set; get; }
         public int? ParentId { set; get; }
         public IFormFile File { get; set; }
     }

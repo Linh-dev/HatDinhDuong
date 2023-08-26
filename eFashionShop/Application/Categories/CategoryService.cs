@@ -9,6 +9,7 @@ using eFashionShop.Data.Entities;
 using eFashionShop.Data.Enums;
 using eFashionShop.Application.CloudinaryService;
 using CloudinaryDotNet.Actions;
+using eFashionShop.Extensions;
 
 namespace eFashionShop.Application.Categories
 {
@@ -26,20 +27,14 @@ namespace eFashionShop.Application.Categories
         public async Task<bool> Create(CategoryCreateVm categoryVm)
         {
             if (categoryVm == null) throw new EShopException("Create fail!");
-            ImageUploadResult image = null;
+            var category = new Category();
+            categoryVm.CopyProperties(category);
             if (categoryVm.File != null)
             {
-                image = await _photoService.AddPhotoAsync(categoryVm.File);
+                ImageUploadResult image = await _photoService.AddPhotoAsync(categoryVm.File);
+                category.ImageUrl = image.SecureUrl.AbsoluteUri;
+                category.ImagePublishId = image.PublicId;
             }
-            var category = new Category
-            {
-                Name = categoryVm.Name,
-                IsShowOnHome = categoryVm.IsShowOnHome,
-                ParentId = categoryVm.ParentId,
-                Status = Status.Active,
-                ImagePublishId = image == null ? "" : image.PublicId,
-                ImageUrl = image == null ? "" : image.SecureUrl.AbsoluteUri
-            };
             _context.Categories.Add(category);
             return await _context.SaveChangesAsync() > 0;
         }
@@ -67,15 +62,15 @@ namespace eFashionShop.Application.Categories
         {
             var category = _context.Categories.Find(categoryUpdateVm.Id);
             if (category == null) throw new EShopException("Update fail!");
-            category.Name = categoryUpdateVm.Name;
-            category.IsShowOnHome = categoryUpdateVm.IsShowOnHome;
-            category.ParentId = category.ParentId;
+            categoryUpdateVm.CopyProperties(category);
+
             if (categoryUpdateVm.File != null)
             {
                 var image = await _photoService.AddPhotoAsync(categoryUpdateVm.File);
                 category.ImagePublishId = image.PublicId;
                 category.ImageUrl = image.SecureUrl.AbsoluteUri;
             }
+            _context.Update(category);
             return await _context.SaveChangesAsync() > 0;
         }
 
@@ -117,7 +112,8 @@ namespace eFashionShop.Application.Categories
                 Id = x.c.Id,
                 Name = x.c.Name,
                 ParentId = x.c.ParentId,
-                IsShowOnHome = x.c.IsShowOnHome
+                IsShowOnHome = x.c.IsShowOnHome,
+                IsMainCategory = x.c.IsMainCategory,
             }).FirstOrDefaultAsync();
             return res;
         }
@@ -130,7 +126,7 @@ namespace eFashionShop.Application.Categories
             {
                 Id = x.c.Id,
                 Name = x.c.Name,
-                ParentId = x.c.ParentId
+                ParentId = x.c.ParentId,
             }).ToListAsync();
             return x;
         }

@@ -8,7 +8,7 @@
 <h1>Thêm mới danh mục</h1>
 
 <div>
-    <a asp-action="Index" class="btn btn-warning">Trở về</a>
+    <a asp-action="Index" class="btn btn-success">Trở về danh sách danh mục</a>
 </div>
 <hr />
 <div class="row">
@@ -23,7 +23,7 @@
             <br />
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsShowOnHome" id="IsMainCategory" /> Hiển thị / ẩn trên web
+                    <input class="form-check-input" asp-for="IsShowOnHome" /> Hiển thị / ẩn trên web
                 </label>
             </div>
             <br />
@@ -63,16 +63,13 @@
 </div>
 <script>
     window.onload = function() {
-        document.querySelector("#IsMainCategory").addEventListener("change", IsMainCategorySelect);
+        $("#IsMainCategory").on("change", IsMainCategorySelect);
         function IsMainCategorySelect(){
-            onsole.log(123);
-            let toggleButton = document.getElementById("IsMainCategory");
-            console.log(toggleButton);
-            console.log(toggleButton.checked);
-            if (toggleButton.checked = true){
-                document.getElementById("IsMainCategory").style.display = 'none';
+            let toggleButton = $("#IsMainCategory");
+            if (toggleButton[0].checked == true) {
+                $("#danhMucId").hide();
             }else{
-                document.getElementById("IsMainCategory").style.display = 'block';
+                $("#danhMucId").show();
             }
         }
     }
