@@ -14,8 +14,6 @@ namespace eFashionShop.ViewModels.Catalog.Products
         public string Details { set; get; }
         public bool IsFeatured { get; set; }
         public string Customer { set; get; }
-        public string Localtion { set; get; }
-        public double Area { get; set; }
         public string ThumbnailImage { get; set; }
         public List<int> Categories { get; set; } = new List<int>();
     }

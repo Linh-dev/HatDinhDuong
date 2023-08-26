@@ -138,8 +138,6 @@ namespace eFashionShop.Controllers.AdminController
                 Details = product.Details,
                 Name = product.Name,
                 Customer = product.Customer,
-                Localtion = product.Localtion,
-                Area = product.Area,
                 IsFeatured = product.IsFeatured
             };
             ViewBag.images = images;

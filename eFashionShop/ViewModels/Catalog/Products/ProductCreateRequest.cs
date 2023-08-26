@@ -13,8 +13,6 @@ namespace eFashionShop.ViewModels.Catalog.Products
         public string Description { set; get; }
         public string Details { set; get; }
         public string Customer { set; get; }
-        public string Localtion { set; get; }
-        public double Area { get; set; }
         public bool IsFeatured { get; set; }
         public IFormFile ThumbnailImage { get; set; }
     }
