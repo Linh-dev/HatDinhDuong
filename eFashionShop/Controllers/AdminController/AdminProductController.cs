@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using eFashionShop.Application.Categories;
+﻿using eFashionShop.Application.Categories;
 using eFashionShop.Application.Products;
-using eFashionShop.Constants;
 using eFashionShop.Exceptions;
+using eFashionShop.Extensions;
 using eFashionShop.ViewModels.Catalog.ProductImages;
 using eFashionShop.ViewModels.Catalog.Products;
 using eFashionShop.ViewModels.Common;
@@ -13,6 +10,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace eFashionShop.Controllers.AdminController
 {
@@ -67,12 +67,12 @@ namespace eFashionShop.Controllers.AdminController
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
+        public async Task<IActionResult> Create([FromForm] ProductCreateRequest req)
         {
             if (!ModelState.IsValid)
-                return View(request);
+                return View(req);
 
-            var result = await _productService.Create(request);
+            var result = await _productService.Create(req);
             if (result != 0)
             {
                 TempData["result"] = "Thêm mới sản phẩm thành công";
@@ -80,7 +80,7 @@ namespace eFashionShop.Controllers.AdminController
             }
 
             ModelState.AddModelError("", "Thêm sản phẩm thất bại");
-            return View(request);
+            return View(req);
         }
 
         [HttpPost]
@@ -131,15 +131,8 @@ namespace eFashionShop.Controllers.AdminController
             if(id == 0) return View();
             var product = await _productService.GetById(id);
             var images = await _productService.GetListImages(id);
-            var editVm = new ProductUpdateRequest()
-            {
-                Id = product.Id,
-                Description = product.Description,
-                Details = product.Details,
-                Name = product.Name,
-                Trademark = product.Customer,
-                IsFeatured = product.IsFeatured
-            };
+            var editVm = new ProductUpdateRequest();
+            product.CopyProperties(editVm);
             ViewBag.images = images;
             return View(editVm);
         }
@@ -183,16 +176,16 @@ namespace eFashionShop.Controllers.AdminController
             return categoryAssignRequest;
         }
 
-        [HttpGet]
-        public IActionResult Delete(int id)
-        {
-            return View(new ProductDeleteRequest()
-            {
-                Id = id
-            });
-        }
+        //[HttpGet]
+        //public IActionResult Delete(int id)
+        //{
+        //    return View(new ProductDeleteRequest()
+        //    {
+        //        Id = id
+        //    });
+        //}
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Delete(ProductDeleteRequest request)
         {
             if (!ModelState.IsValid)

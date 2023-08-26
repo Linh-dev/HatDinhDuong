@@ -31,9 +31,29 @@
                         <span asp-validation-for="Details" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Trademark" class="control-label">Khách hàng</label>
+                        <label asp-for="Trademark" class="control-label">Thương hiệu</label>
                         <input asp-for="Trademark" class="form-control" />
                         <span asp-validation-for="Trademark" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ProductOrigin" class="control-label">Nguồn gốc</label>
+                        <input asp-for="ProductOrigin" class="form-control" />
+                        <span asp-validation-for="ProductOrigin" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Ingredient" class="control-label">Thành phần</label>
+                        <input asp-for="Ingredient" class="form-control" />
+                        <span asp-validation-for="Ingredient" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Expiry" class="control-label">Hạn sử dụng</label>
+                        <input asp-for="Expiry" class="form-control" />
+                        <span asp-validation-for="Expiry" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BlogDescription" class="control-label">Blog mô tả công dụng và cách sử dụng</label>
+                        <textarea asp-for="BlogDescription" rows="8" class="form-control"></textarea>
+                        <span asp-validation-for="BlogDescription" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="ThumbnailImage" class="control-label">Ảnh</label>
@@ -42,7 +62,7 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="IsFeatured" class="control-label">Sản phẩm nổi bật</label>
-                        <input asp-for="IsFeatured" type="checkbox"/>
+                        <input asp-for="IsFeatured" type="checkbox" />
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Tạo mới" class="btn btn-primary" />

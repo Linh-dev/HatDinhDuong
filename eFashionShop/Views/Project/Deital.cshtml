@@ -177,29 +177,6 @@
     <div class="title-devider"></div>
 </div>
 <div class="site-wrapper">
-    <!-- Contact -->
-    @{
-        if (Model.productVms != null)
-        {
-                <div class="container padding-bottom text-center contact-adress">
-
-                    @Html.Raw(@Model.productVms.Details)
-
-                    <div class="row wow fadeInUp" data-wow-duration="1000ms" data-wow-delay="200ms">
-                        <div class="col-sm-4 col-md-4">
-                            <h3>Khách Hàng</h3>
-                            <address>
-                                <h4>
-                                    @Model.productVms.Customer
-                                </h4>
-                            </address>
-                        </div>
-                    </div>
-                </div>
-
-
-        }
-    }
     <div class="general-title wow fadeInUp animated" data-wow-duration="1000ms" data-wow-delay="200ms" style="visibility: visible; animation-duration: 1000ms; animation-delay: 200ms; animation-name: fadeInUp;">
         <h2>Dự án nổi bật</h2>
         <div class="title-devider"></div>

@@ -49,7 +49,7 @@ namespace eFashionShop.Application.Contacts
         public async Task<bool> Delete(int id)
         {
             if (id < 0) throw new EShopException("Delete contact fail!");
-            var contact = await _context.Contacts.FindAsync(id);
+            var contact = _context.Contacts.Find(id);
             _context.Contacts.Remove(contact);
             return await _context.SaveChangesAsync() > 0;
         }

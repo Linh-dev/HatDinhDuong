@@ -1,19 +1,15 @@
 ﻿using eFashionShop.Application.CloudinaryService;
-using eFashionShop.Application.Images;
 using eFashionShop.Data.EF;
 using eFashionShop.Data.Entities;
 using eFashionShop.Exceptions;
+using eFashionShop.Extensions;
 using eFashionShop.ViewModels.Catalog.ProductImages;
 using eFashionShop.ViewModels.Catalog.Products;
 using eFashionShop.ViewModels.Common;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace eFashionShop.Application.Products
@@ -53,31 +49,25 @@ namespace eFashionShop.Application.Products
             return productImage.Id;
         }
 
-        public async Task<int> Create(ProductCreateRequest request)
+        public async Task<int> Create(ProductCreateRequest req)
         {
-            var product = new Product()
-            {
-                DateCreated = DateTime.Now,
-                Name = request.Name,
-                Description = request.Description,
-                Details = request.Details,
-                Trademark = request.Trademark,
-                IsFeatured = request.IsFeatured,
-            };
+            var product = new Product();
+
+            req.CopyProperties(product);
 
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
             //Save image
-            if (request.ThumbnailImage != null)
+            if (req.ThumbnailImage != null)
             {
-                var resultImage = await _photoService.AddPhotoAsync(request.ThumbnailImage);
+                var resultImage = await _photoService.AddPhotoAsync(req.ThumbnailImage);
                 var image = new ProductImage()
                 {
                     ProductId = product.Id,
                     Caption = "Thumbnail image",
                     DateCreated = DateTime.Now,
-                    FileSize = request.ThumbnailImage.Length,
+                    FileSize = req.ThumbnailImage.Length,
                     ImagePath = resultImage.SecureUrl.AbsoluteUri,
                     PublicId = resultImage.PublicId,
                     IsDefault = true,
@@ -132,11 +122,16 @@ namespace eFashionShop.Application.Products
                     .Select(x => new ProductVm()
                     {
                         Id = x.p.Id,
-                        Name = x.p.Name,
                         DateCreated = x.p.DateCreated,
+                        Name = x.p.Name,
                         Description = x.p.Description,
                         Details = x.p.Details,
-                        Customer = x.p.Trademark,
+                        IsFeatured = x.p.IsFeatured,
+                        Trademark = x.p.Trademark,
+                        ProductOrigin = x.p.ProductOrigin,
+                        Ingredient = x.p.Ingredient,
+                        Expiry = x.p.Expiry,
+                        BlogDescription = x.p.BlogDescription,
                     }).ToListAsync();
             }
             else
@@ -156,11 +151,16 @@ namespace eFashionShop.Application.Products
                     .Select(x => new ProductVm()
                     {
                         Id = x.p.Id,
-                        Name = x.p.Name,
                         DateCreated = x.p.DateCreated,
+                        Name = x.p.Name,
                         Description = x.p.Description,
                         Details = x.p.Details,
-                        Customer = x.p.Trademark,
+                        IsFeatured = x.p.IsFeatured,
+                        Trademark = x.p.Trademark,
+                        ProductOrigin = x.p.ProductOrigin,
+                        Ingredient = x.p.Ingredient,
+                        Expiry = x.p.Expiry,
+                        BlogDescription = x.p.BlogDescription,
                     }).ToListAsync();
             }
 
@@ -187,12 +187,16 @@ namespace eFashionShop.Application.Products
             data = await query.Select(x => new ProductVm()
                 {
                     Id = x.p.Id,
-                    Name = x.p.Name,
                     DateCreated = x.p.DateCreated,
+                    Name = x.p.Name,
                     Description = x.p.Description,
                     Details = x.p.Details,
-                    Customer = x.p.Trademark,
-                    ThumbnailImage = x.i.ImagePath,
+                    IsFeatured = x.p.IsFeatured,
+                    Trademark = x.p.Trademark,
+                    ProductOrigin = x.p.ProductOrigin,
+                    Ingredient = x.p.Ingredient,
+                    Expiry = x.p.Expiry,
+                    BlogDescription = x.p.BlogDescription,
                 }).ToListAsync();
             return data;
         }
@@ -211,7 +215,11 @@ namespace eFashionShop.Application.Products
                 Description = product != null ? product.Description : null,
                 Details = product != null ? product.Details : null,
                 Name = product != null ? product.Name : null,
-                Customer = product != null ? product.Trademark : null,
+                Trademark = product != null ? product.Trademark : null,
+                ProductOrigin = product != null ? product.ProductOrigin : null,
+                Ingredient = product != null ? product.Ingredient : null,
+                Expiry = product != null ? product.Expiry : null,
+                BlogDescription = product != null ? product.BlogDescription : null,
                 ThumbnailImage = image != null ? image.ImagePath : "no-image.jpg",
                 IsFeatured = product.IsFeatured,
                 Categories = categories
@@ -236,7 +244,11 @@ namespace eFashionShop.Application.Products
                         DateCreated = product.DateCreated,
                         Description = product.Description,
                         Details = product.Details,
-                        Customer = product.Trademark,
+                        Trademark = product.Trademark,
+                        ProductOrigin = product.ProductOrigin,
+                        Ingredient = product.Ingredient,
+                        Expiry = product.Expiry,
+                        BlogDescription = product.BlogDescription,
                         ThumbnailImage = image != null ? image.ImagePath : "",
                     });
                 }
@@ -295,17 +307,14 @@ namespace eFashionShop.Application.Products
             throw new EShopException($"Cannot find an image with id {imageId}");
         }
 
-        public async Task<int> Update(ProductUpdateRequest request)
+        public async Task<int> Update(ProductUpdateRequest req)
         {
-            var product = await _context.Products.FindAsync(request.Id);
+            var product = await _context.Products.FindAsync(req.Id);
 
-            if (product == null) throw new EShopException($"Cannot find a product with id: {request.Id}");
+            if (product == null) throw new EShopException($"Cannot find a product with id: {req.Id}");
 
-            product.Name = request.Name;
-            product.Description = request.Description;
-            product.Details = request.Details;
-            product.Trademark = request.Trademark;
-            product.IsFeatured = request.IsFeatured;
+            req.CopyProperties(product);
+
             _context.Update(product);
             return await _context.SaveChangesAsync();
         }
@@ -372,8 +381,12 @@ namespace eFashionShop.Application.Products
                     Name = x.p.Name,
                     Details = x.p.Details,
                     Description = x.p.Description,
+                    Trademark = x.p.Trademark,
+                    ProductOrigin = x.p.ProductOrigin,
+                    Ingredient = x.p.Ingredient,
+                    Expiry = x.p.Expiry,
+                    BlogDescription = x.p.BlogDescription,
                     ImagePath = x.i.ImagePath,
-                    Customer = x.p.Trademark,
                     IsFeatured = x.p.IsFeatured
                 }).ToListAsync();
 

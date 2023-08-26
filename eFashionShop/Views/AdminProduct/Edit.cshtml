@@ -36,9 +36,29 @@
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="Trademark" class="control-label">Khách hàng</label>
-                        <input class="form-control"  asp-for="Trademark" />
+                        <label asp-for="Trademark" class="control-label">Thương hiệu</label>
+                        <input asp-for="Trademark" class="form-control" />
                         <span asp-validation-for="Trademark" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ProductOrigin" class="control-label">Nguồn gốc</label>
+                        <input asp-for="ProductOrigin" class="form-control" />
+                        <span asp-validation-for="ProductOrigin" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Ingredient" class="control-label">Thành phần</label>
+                        <input asp-for="Ingredient" class="form-control" />
+                        <span asp-validation-for="Ingredient" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Expiry" class="control-label">Hạn sử dụng</label>
+                        <input asp-for="Expiry" class="form-control" />
+                        <span asp-validation-for="Expiry" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BlogDescription" class="control-label">Blog mô tả công dụng và cách sử dụng</label>
+                        <textarea asp-for="BlogDescription" rows="8" class="form-control"></textarea>
+                        <span asp-validation-for="BlogDescription" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="IsFeatured" class="control-label">Sản phẩm nổi bật</label>
@@ -91,15 +111,3 @@
 <script>
     CKEDITOR.replace("txt_details");
 </script>
-@*<script>
-    var $form = $("#checkImage");
-    var $submitbutton = $("#submitbutton");
-
-    $form.on("blur", "input", () => {
-    if ($form.valid()) {
-    $submitbutton.removeAttr("disabled");
-    } else {
-    $submitbutton.attr("disabled", "disabled");
-    }
-    });
-    </script>*@
