@@ -10,18 +10,18 @@ using eFashionShop.Data.Enums;
 using eFashionShop.Application.CloudinaryService;
 using CloudinaryDotNet.Actions;
 using eFashionShop.Extensions;
+using eFashionShop.Application.Images;
 
 namespace eFashionShop.Application.Categories
 {
     public class CategoryService : ICategoryService
     {
         private readonly EShopDbContext _context;
-        private readonly IPhotoService _photoService;
-
-        public CategoryService(EShopDbContext context, IPhotoService photoService)
+        private readonly IImageService _imageService;
+        public CategoryService(EShopDbContext context, IImageService imageService)
         {
             _context = context;
-            _photoService = photoService;
+            _imageService = imageService;
         }
 
         public async Task<bool> Create(CategoryCreateVm categoryVm)
@@ -31,9 +31,7 @@ namespace eFashionShop.Application.Categories
             categoryVm.CopyProperties(category);
             if (categoryVm.File != null)
             {
-                ImageUploadResult image = await _photoService.AddPhotoAsync(categoryVm.File);
-                category.ImageUrl = image.SecureUrl.AbsoluteUri;
-                category.ImagePublishId = image.PublicId;
+                //Todo bổ sung add image cho category
             }
             _context.Categories.Add(category);
             return await _context.SaveChangesAsync() > 0;
@@ -44,7 +42,8 @@ namespace eFashionShop.Application.Categories
             var category = _context.Categories.Find(id);
             if (category == null) throw new EShopException("Delete fail!");
             _context.Categories.Remove(category);
-            if (!string.IsNullOrEmpty(category.ImagePublishId)) await _photoService.DeletePhotoAsync(category.ImagePublishId);
+            //Todo bổ sung delte image cho category
+            //if (!string.IsNullOrEmpty(category.ImagePublishId)) await _photoService.DeletePhotoAsync(category.ImagePublishId);
             var childCategories = _context.Categories.Where(x => x.ParentId == category.Id);
             if(childCategories.Any())
             {
@@ -52,7 +51,8 @@ namespace eFashionShop.Application.Categories
                 foreach (var c in childCategories1)
                 {
                     _context.Categories.Remove(c);
-                    if (!string.IsNullOrEmpty(c.ImagePublishId)) await _photoService.DeletePhotoAsync(c.ImagePublishId);
+                    //Todo bổ sung delte image cho category
+                    //if (!string.IsNullOrEmpty(c.ImagePublishId)) await _photoService.DeletePhotoAsync(c.ImagePublishId);
                 }
             }
             return await _context.SaveChangesAsync() > 0;
@@ -66,9 +66,8 @@ namespace eFashionShop.Application.Categories
 
             if (categoryUpdateVm.File != null)
             {
-                var image = await _photoService.AddPhotoAsync(categoryUpdateVm.File);
-                category.ImagePublishId = image.PublicId;
-                category.ImageUrl = image.SecureUrl.AbsoluteUri;
+                //Todo bổ sung add image cho category
+                //var image = await _photoService.AddPhotoAsync(categoryUpdateVm.File);
             }
             _context.Update(category);
             return await _context.SaveChangesAsync() > 0;

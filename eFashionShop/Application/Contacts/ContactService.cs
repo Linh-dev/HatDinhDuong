@@ -89,7 +89,7 @@ namespace eFashionShop.Application.Contacts
             }
             catch (Exception ex)
             {
-                return false;
+                throw (ex);
             }
         }
 

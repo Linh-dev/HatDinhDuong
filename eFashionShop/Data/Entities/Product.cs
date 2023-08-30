@@ -43,6 +43,6 @@ namespace eFashionShop.Data.Entities
         /// </summary>
         public bool IsFeatured { get; set; }
         public List<ProductInCategory> ProductInCategories { get; set; }
-        public List<ProductImage> ProductImages { get; set; }
+        //public List<ProductImage> ProductImages { get; set; }
     }
 }
